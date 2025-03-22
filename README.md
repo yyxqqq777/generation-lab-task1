@@ -1,8 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Form Validation Demo Project
 
-## Getting Started
+This is a form validation demo application built with Next.js and TailwindCSS. The application allows users to submit their email address (required) and phone number (optional) with both client-side and server-side validation.
 
-First, run the development server:
+## Features
+
+- **Form Fields**:
+  - Email Address (Required) - Must follow a valid email format
+  - Phone Number (Optional) - If provided, must follow a valid US mobile phone format (e.g., 412-977-8194)
+
+- **Validation**:
+  - Client-side validation: Real-time validation using Zod and React Hook Form
+  - Server-side validation: Validation through a mock API
+
+- **Submission Process**:
+  - If client-side validation fails, submission is prevented and appropriate inline error messages are displayed
+  - If input is valid, a mock API is called and displays:
+    - Success message for successful submission
+    - Any server-side errors returned by the API
+
+## Tech Stack
+
+- **Next.js 15** - React framework
+- **TailwindCSS** - Styling solution
+- **React Hook Form** - Form handling
+- **Zod** - Form validation
+
+## Installation and Running
+
+### Prerequisites
+
+- Node.js 18.17.0 or higher
+- npm or yarn or pnpm
+
+### Installation Steps
+
+1. Clone or download this repository
+2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Start the development server
 
 ```bash
 npm run dev
@@ -10,15 +53,69 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Mock API
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses Next.js API routes to simulate a backend service. The API endpoint is located at `/api/v1/demo/submit` and accepts a JSON payload with the following fields:
+
+```json
+{
+  "email": "string",
+  "phone": "string (optional)"
+}
+```
+
+The API responses include the following types:
+
+1. Success Response:
+```json
+{
+  "status": "success",
+  "message": "Form submitted successfully"
+}
+```
+
+2. Validation Error Response:
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "errors": {
+    "email": "Invalid email format",
+    "phone": "Invalid phone number"
+  }
+}
+```
+
+3. Server Error Response:
+```json
+{
+  "status": "error",
+  "message": "Internal server error"
+}
+```
+
+The mock API also randomly generates errors (approximately 10% chance) to simulate real-world server error scenarios.
+
+## Project Structure
+
+```
+/src
+  /app
+    /api
+      /v1
+        /demo
+          /submit
+            route.ts      # Mock API endpoint
+    /page.tsx             # Home page
+  /components
+    /ContactForm.tsx      # Form component
+  /lib
+    /schema.ts            # Form validation Schema
+```
 
 ## Learn More
 
