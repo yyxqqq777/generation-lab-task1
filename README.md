@@ -1,104 +1,125 @@
 # Form Validation Demo Project
 
-This is a form validation demo application built with Next.js and TailwindCSS. The application allows users to submit their email address (required) and phone number (optional) with both client-side and server-side validation.
+This is a form validation demo application built with Next.js 15 and TailwindCSS. The application features a stylish form with automatic phone number formatting, where users can submit their email address (required) and phone number (optional) with both client-side and server-side validation.
 
 ## Features
 
+- **Form UI**:
+  - Modern gradient background with rounded inputs
+  - Country code prefix (+1) for North American phone numbers
+  - Auto-formatting for phone numbers (xxx-xxx-xxxx format)
+  - Responsive design with clean error states
+
 - **Form Fields**:
   - Email Address (Required) - Must follow a valid email format
-  - Phone Number (Optional) - If provided, must follow a valid US mobile phone format (e.g., 412-977-8194)
+  - Phone Number (Optional) - North American format with auto-formatting (e.g., 412-977-8194)
 
 - **Validation**:
   - Client-side validation: Real-time validation using Zod and React Hook Form
-  - Server-side validation: Validation through a mock API
-
-- **Submission Process**:
-  - If client-side validation fails, submission is prevented and appropriate inline error messages are displayed
-  - If input is valid, a mock API is called and displays:
-    - Success message for successful submission
-    - Any server-side errors returned by the API
+  - Server-side validation: Validation through mock API implementations
 
 ## Tech Stack
 
-- **Next.js 15** - React framework
-- **TailwindCSS** - Styling solution
-- **React Hook Form** - Form handling
-- **Zod** - Form validation
+- **Next.js 15** - React framework with App Router
+- **TailwindCSS** - Utility-first CSS framework
+- **React Hook Form** - Form state management and validation
+- **Zod** - TypeScript-first schema validation
+- **TypeScript** - Static type checking
 
 ## Installation and Running
 
 ### Prerequisites
 
 - Node.js 18.17.0 or higher
-- npm or yarn or pnpm
+- pnpm 8.0.0 or higher (recommended)
 
 ### Installation Steps
 
 1. Clone or download this repository
-2. Install dependencies
+2. Install dependencies with pnpm
 
 ```bash
-npm install
-# or
-yarn install
-# or
 pnpm install
 ```
 
 3. Start the development server
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
 ```
 
 4. Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
 
-## Mock API
+## Mock API Implementation
 
-This project uses Next.js API routes to simulate a backend service. The API endpoint is located at `/api/v1/demo/submit` and accepts a JSON payload with the following fields:
+This project demonstrates multiple approaches to implementing mock APIs:
 
-```json
-{
-  "email": "string",
-  "phone": "string (optional)"
-}
-```
+### 1. Built-in Next.js API Routes
 
-The API responses include the following types:
+The project includes a Next.js API route that simulates a backend service:
 
-1. Success Response:
-```json
-{
-  "status": "success",
-  "message": "Form submitted successfully"
-}
-```
-
-2. Validation Error Response:
-```json
-{
-  "status": "error",
-  "message": "Validation error",
-  "errors": {
-    "email": "Invalid email format",
-    "phone": "Invalid phone number"
+- **Endpoint**: `/api/v1/demo/submit`
+- **Method**: POST
+- **Payload**:
+  ```json
+  {
+    "email": "string",
+    "phone": "string (optional)"
   }
-}
-```
+  ```
 
-3. Server Error Response:
-```json
-{
-  "status": "error",
-  "message": "Internal server error"
-}
-```
+Response types:
 
-The mock API also randomly generates errors (approximately 10% chance) to simulate real-world server error scenarios.
+- **Success Response**:
+  ```json
+  {
+    "status": "success",
+    "message": "Form submitted successfully"
+  }
+  ```
+
+- **Validation Error**:
+  ```json
+  {
+    "status": "error",
+    "message": "Validation error",
+    "errors": {
+      "email": "Please enter a valid email address",
+      "phone": "Please enter a valid North American phone number"
+    }
+  }
+  ```
+
+- **Server Error**:
+  ```json
+  {
+    "status": "error",
+    "message": "Internal server error"
+  }
+  ```
+
+### 2. Static Response Simulation
+
+The project includes a MockApiTester component that allows testing form behavior with predefined static responses:
+
+- **Simulate Success**: Returns a successful form submission response
+- **Simulate Validation Error**: Returns a validation error response
+- **Simulate Server Error**: Returns a server error response
+
+### 3. External Mock API Tools
+
+For more advanced mocking capabilities, consider these external tools:
+
+- **Mockoon** (https://mockoon.com/): Desktop application for creating mock APIs
+  - Create static JSON responses
+  - Set up custom routes and status codes
+  - Define dynamic templating rules
+  - Simulate delays and environments
+
+- **MSW (Mock Service Worker)** (https://mswjs.io/):
+  - Intercept network requests directly in the browser
+  - Integrated with React and other frameworks
+  - Works with real API calls - no code changes needed
 
 ## Project Structure
 
@@ -109,12 +130,14 @@ The mock API also randomly generates errors (approximately 10% chance) to simula
       /v1
         /demo
           /submit
-            route.ts      # Mock API endpoint
+            route.ts      # Built-in mock API endpoint
     /page.tsx             # Home page
   /components
+    /ClientContactForm.tsx # Client component wrapper
     /ContactForm.tsx      # Form component
+    /MockApiTester.tsx    # Mock API testing interface
   /lib
-    /schema.ts            # Form validation Schema
+    /schema.ts            # Form validation schema
 ```
 
 ## Learn More
